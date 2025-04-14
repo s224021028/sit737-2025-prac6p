@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: calculator-deployment
+  labels:
+    app: calculator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: calculator
+  template:
+    metadata:
+      labels:
+        app: calculator
+    spec:
+      containers:
+      - name: calculator
+        image: s224021028/calculator
+        ports:
+        - containerPort: 3000
+        livenessProbe:
+          httpGet:
+            path: /sqrt?num1=55
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 3
+      restartPolicy: Always

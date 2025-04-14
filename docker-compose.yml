@@ -1,0 +1,37 @@
+# Specifies Docker Compose file format version
+version: "3.8"
+
+# Define the services (containers) that make up your application
+services:
+
+  # Name the service
+  calculator:
+
+    # Build this service using a Dockerfile in the current directory
+    build:
+      dockerfile: Dockerfile
+    
+    # Expose container port 3000 on host port 3000
+    ports:
+      - "3000:3000"
+    
+    # Define health check to monitor container status
+    healthcheck:
+
+      # The test command to run inside the container
+      test: ["CMD", "curl", "-f", "http://localhost:3000/sqrt?num1=55"]
+
+       # Run the health check every 30 seconds
+      interval: 30s
+
+      # Allow up to 10 seconds for the health check to complete
+      timeout: 10s
+
+      # Container is marked unhealthy after 3 consecutive failures
+      retries: 3
+
+      # Initial grace period after container starts before beginning health checks
+      start_period: 5s
+    
+    # Restart policy defines when Docker should automatically restart the container
+    restart: on-failure
